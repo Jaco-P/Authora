@@ -73,5 +73,6 @@ dotnet run --project Authora
 All rights reserved. This code is proprietary and was submitted solely for assessment purposes.  
 No part of this codebase may be reused, copied, or redistributed without explicit permission.
 
-![image](https://github.com/user-attachments/assets/52f7b179-4f2c-4a1e-883b-702604b68465)
+![image](https://github.com/user-attachments/assets/d06567a6-cec0-4c2d-8073-f45fb9b727c9)
+
 
