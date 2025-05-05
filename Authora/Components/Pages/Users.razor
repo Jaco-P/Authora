@@ -1,5 +1,6 @@
 ﻿@page "/users"
 @rendermode InteractiveServer
+
 <h3>Users</h3>
 
 @if (_users is null)
@@ -13,15 +14,47 @@ else
             <tr>
                 <th>Username</th>
                 <th>Email</th>
+                <th></th> <!-- actions -->
             </tr>
         </thead>
         <tbody>
             @foreach (var user in _users)
             {
-                <tr>
-                    <td>@user.Username</td>
-                    <td>@user.Email</td>
-                </tr>
+                if (_editingUserId == user.Id)
+                {
+                    <tr>
+                        <td colspan="3">
+                            <EditForm Model="_editedUser" OnValidSubmit="SaveUser" FormName="editUserForm">
+                                <DataAnnotationsValidator />
+                                <div class="d-flex flex-column flex-md-row gap-2">
+                                    <div>
+                                        <InputText @bind-Value="_editedUser.Username" class="form-control" placeholder="Username" />
+                                        <ValidationMessage For="@(() => _editedUser.Username)" />
+                                    </div>
+                                    <div>
+                                        <InputText @bind-Value="_editedUser.Email" class="form-control" placeholder="Email" />
+                                        <ValidationMessage For="@(() => _editedUser.Email)" />
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                                        <button type="button" class="btn btn-secondary btn-sm ms-1" @onclick="CancelEdit">Cancel</button>
+                                    </div>
+                                </div>
+                            </EditForm>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@user.Username</td>
+                        <td>@user.Email</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" @onclick="() => EditUser(user)">Edit</button>
+                            <button class="btn btn-sm btn-danger ms-1" @onclick="() => DeleteUser(user.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
@@ -51,6 +84,6 @@ else
         <InputText @bind-Value="_newUser.Email" class="form-control" />
         <ValidationMessage For="@(() => _newUser.Email)" />
     </div>
-    <p class="text-danger">DEBUG: @_newUser.Username | @_newUser.Email</p>
+
     <button type="submit" class="btn btn-primary">Add</button>
 </EditForm>
