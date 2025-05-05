@@ -18,6 +18,9 @@ builder.Services.AddDbContext<AuthoraDbContext>(options =>
 //Register User Service
 builder.Services.AddScoped<IUserService, UserService>();
 
+//Register Group Service
+builder.Services.AddScoped<IGroupService, GroupService>();
+
 
 var app = builder.Build();
 

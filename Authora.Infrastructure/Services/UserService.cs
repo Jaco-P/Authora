@@ -57,6 +57,35 @@ namespace Authora.Infrastructure.Services
             }
         }
 
+        public async Task AssignGroupsAsync(Guid userId, List<Guid> groupIds)
+        {
+            var user = await _context.Users
+                .Include(u => u.UserGroups)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null) return;
+
+            // Remove old assignments
+            user.UserGroups.Clear();
+
+            // Add new
+            foreach (var groupId in groupIds)
+            {
+                user.UserGroups.Add(new UserGroup
+                {
+                    UserId = userId,
+                    GroupId = groupId
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Group>> GetAllGroupsAsync()
+        {
+            return await _context.Groups.ToListAsync();
+        }
+
     }
 }
 

@@ -14,42 +14,53 @@ namespace Authora.Components.Pages
         [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
         private List<User> _users = new();
+        private List<Group> _allGroups = new();
+
         private User _newUser = new();
         private User _editedUser = new();
+
         private Guid? _editingUserId = null;
         private string? _successMessage;
 
         private EditContext? _editContext;
         private bool _editFormValid = false;
 
+        private Dictionary<Guid, bool> _groupAssignments = new();
+        private Guid? _newUserSelectedGroupId;
+
         protected override async Task OnInitializedAsync()
         {
             _users = await UserService.GetAllAsync();
+            _allGroups = await UserService.GetAllGroupsAsync();
         }
 
         private async Task HandleValidSubmit()
         {
+            _newUser.Id = Guid.NewGuid();
 
-            try
+            if (_newUserSelectedGroupId.HasValue)
             {
-                _newUser.Id = Guid.NewGuid();
-                await UserService.AddAsync(_newUser);
-                _users = await UserService.GetAllAsync();
-                _successMessage = $"User '{_newUser.Username}' added successfully.";
-                _newUser = new();
-            }
-            catch (Exception ex)
-            {
-                while (ex.InnerException != null)
+                _newUser.UserGroups.Add(new UserGroup
                 {
-                    ex = ex.InnerException;
-                }
-                Console.WriteLine($"Erro saving user. The error was {ex.Message}");
+                    UserId = _newUser.Id,
+                    GroupId = _newUserSelectedGroupId.Value
+                });
             }
-            finally
+
+            await UserService.AddAsync(_newUser);
+            _users = await UserService.GetAllAsync();
+            _successMessage = $"User '{_newUser.Username}' added successfully.";
+            StateHasChanged();
+
+            _ = Task.Run(async () =>
             {
-                StateHasChanged();
-            }
+                await Task.Delay(4000);
+                _successMessage = null;
+                await InvokeAsync(StateHasChanged);
+            });
+
+            _newUser = new();
+            _newUserSelectedGroupId = null;
         }
 
         private void EditUser(User user)
@@ -68,17 +79,48 @@ namespace Authora.Components.Pages
                 _editFormValid = _editContext.Validate();
                 StateHasChanged();
             };
-
-            // Initialize validity state
             _editFormValid = _editContext.Validate();
+
+            _groupAssignments = _allGroups.ToDictionary(
+                g => g.Id,
+                g => user.UserGroups.Any(ug => ug.GroupId == g.Id)
+            );
+
+            _successMessage = $"User '{_newUser.Username}' edited successfully.";
+            StateHasChanged();
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                _successMessage = null;
+                await InvokeAsync(StateHasChanged);
+            });
         }
 
         private async Task SaveUser()
         {
             await UserService.UpdateAsync(_editedUser);
+
+            var selectedGroupIds = _groupAssignments
+                .Where(g => g.Value)
+                .Select(g => g.Key)
+                .ToList();
+
+            await UserService.AssignGroupsAsync(_editedUser.Id, selectedGroupIds);
+
             _editingUserId = null;
+            _editFormValid = false;
+
             _users = await UserService.GetAllAsync();
-            _successMessage = "User updated successfully.";
+            _successMessage = $"User '{_newUser.Username}' added successfully.";
+            StateHasChanged();
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                _successMessage = null;
+                await InvokeAsync(StateHasChanged);
+            });
         }
 
         private void CancelEdit()

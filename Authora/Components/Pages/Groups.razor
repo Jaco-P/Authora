@@ -1,0 +1,57 @@
+﻿@page "/groups"
+@rendermode InteractiveServer
+
+
+@inject IJSRuntime JS
+
+<h3>Groups</h3>
+
+@if (!string.IsNullOrEmpty(_successMessage))
+{
+    <div class="alert alert-success">@_successMessage</div>
+}
+
+@if (_groups == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in _groups)
+            {
+                <tr>
+                    <td>@group.Name</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteGroup(group.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+
+<h4>Add Group</h4>
+
+<EditForm Model="_newGroup" OnValidSubmit="AddGroup" FormName="addGroupForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Group Name</label>
+        <InputText @bind-Value="_newGroup.Name" class="form-control" />
+        <ValidationMessage For="@(() => _newGroup.Name)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Group</button>
+</EditForm>
+
