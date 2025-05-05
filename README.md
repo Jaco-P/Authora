@@ -1,56 +1,77 @@
 # Authora
 
-User and User-Group Management System.
+Authora is a Blazor Server application built with .NET 9 that supports user management, group assignment, and permission modeling.  
+It was developed as part of a coding assessment with an emphasis on:
 
-Assessment Excercise:
+- ✅ Clean architecture
+- ✅ Code-first Entity Framework Core
+- ✅ Scalable and maintainable design
+- ✅ SQLite-based persistence
+- ✅ Modular service and UI layers
 
-Development Task
+---
 
-In the following tasks, we emphasize maintainability in code structure, a good database design, performance, and scalability.
+## 🏗️ Architecture
 
-The tasks are intentionally very open to interpretation and execution. When completed, please submit the code and database structure via GitHub
+This project follows Clean Architecture principles:
 
- 
+---
 
-Task 1
+## ⚙️ Tech Stack
 
-Create a database using code first. (SQL database)
+- .NET 9 (Preview)
+- Blazor Server
+- Entity Framework Core (SQLite)
+- Bootstrap 5 (UI styling)
 
-A user should be able to appear in multiple groups, and conversely, there should be multiple users in a group.
+---
 
-Each Group should have multiple permissions (Users, Groups, Permissions)
+## 📦 Features
 
-(You can make up the permissions names e.g. Level 1, Level 2 etc. and group Names)
+| Feature                        | Status |
+|-------------------------------|--------|
+| User CRUD                     | ✅ Done |
+| Group CRUD                    | ✅ Done |
+| Assign groups to users        | ✅ Done |
+| View user group assignments   | ✅ Done |
+| Edit group assignments        | ✅ Done |
+| Code-first EF Core setup      | ✅ Done |
+| SQLite persistence            | ✅ Done |
+| Success messages with timeout | ✅ Done |
+| Clean service layering        | ✅ Done |
+| Fully interactive UI          | ✅ Done |
 
- 
+---
 
-Task 2
+## 🧪 Bonus
 
-Create a simple web service that supports user management. (Add, Remove, Update)
+- Group assignment is interactive (checkboxes/dropdowns)
+- Success alerts auto-dismiss after 4 seconds
+- Designed for extensibility (permissions per group, RBAC ready)
+- No third-party dependencies required
 
-Add some endpoints for user count and number of users per group count.
+---
 
-The .NET framework or .NET Core should be used.
+## 🚀 Getting Started
 
- 
+### Prerequisites
 
-Task 3
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+- Visual Studio 2022 (Preview) or VS Code
 
-Create a web interface where users can be added, edited, and deleted.
+### Steps
 
-The visual aspect is not important.
+```bash
+git clone https://github.com/your-username/Authora.git
+cd Authora
+dotnet build
+dotnet ef database update --project Authora.Infrastructure --startup-project Authora
+dotnet run --project Authora
 
-Use the Web Api that you created in Task 2
+## 📄 License
 
-The .NET framework or .NET Core should be used.
-
- 
-
-Extra Points :
-
-Add some Unit tests and Integration Tests
-
-We should also be able to pull the project from Github and deploy it to our local machine.
+All rights reserved. This code is proprietary and was submitted solely for assessment purposes.  
+No part of this codebase may be reused, copied, or redistributed without explicit permission.
 
 ![image](https://github.com/user-attachments/assets/52f7b179-4f2c-4a1e-883b-702604b68465)
 
