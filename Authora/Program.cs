@@ -1,10 +1,23 @@
 using Authora.Components;
+using Authora.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Authora.Application.Interfaces;
+using Authora.Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+//Register SQLite Service
+builder.Services.AddDbContext<AuthoraDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Register User Service
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 
@@ -24,5 +37,7 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+
 
 app.Run();

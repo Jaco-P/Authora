@@ -1,0 +1,56 @@
+﻿@page "/users"
+@rendermode InteractiveServer
+<h3>Users</h3>
+
+@if (_users is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in _users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+
+<h4>Add User</h4>
+
+@if (!string.IsNullOrEmpty(_successMessage))
+{
+    <div class="alert alert-success">@_successMessage</div>
+}
+
+<EditForm Model="_newUser" OnValidSubmit="HandleValidSubmit" FormName="addUserForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Username</label>
+        <InputText @bind-Value="_newUser.Username" class="form-control" />
+        <ValidationMessage For="@(() => _newUser.Username)" />
+    </div>
+
+    <div class="mb-2">
+        <label>Email</label>
+        <InputText @bind-Value="_newUser.Email" class="form-control" />
+        <ValidationMessage For="@(() => _newUser.Email)" />
+    </div>
+    <p class="text-danger">DEBUG: @_newUser.Username | @_newUser.Email</p>
+    <button type="submit" class="btn btn-primary">Add</button>
+</EditForm>

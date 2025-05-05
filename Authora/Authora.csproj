@@ -1,8 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Authora.Application\Authora.Application.csproj" />
     <ProjectReference Include="..\Authora.Domain\Authora.Domain.csproj" />
+    <ProjectReference Include="..\Authora.Infrastructure\Authora.Infrastructure.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
