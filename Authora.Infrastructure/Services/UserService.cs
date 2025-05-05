@@ -18,8 +18,8 @@ namespace Authora.Infrastructure.Services
         public async Task<List<User>> GetAllAsync()
         {
             return await _context.Users
-                //.Include(u => u.UserGroups)
-                //.ThenInclude(ug => ug.Group)
+                .Include(u => u.UserGroups)
+                    .ThenInclude(ug => ug.Group)
                 .ToListAsync();
         }
 
@@ -53,7 +53,7 @@ namespace Authora.Infrastructure.Services
             if (user != null)
             {
                 _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();                
             }
         }
 

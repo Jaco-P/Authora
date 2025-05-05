@@ -49,15 +49,8 @@ namespace Authora.Components.Pages
 
             await UserService.AddAsync(_newUser);
             _users = await UserService.GetAllAsync();
-            _successMessage = $"User '{_newUser.Username}' added successfully.";
-            StateHasChanged();
-
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(4000);
-                _successMessage = null;
-                await InvokeAsync(StateHasChanged);
-            });
+            ShowSuccessMessage($"User '{_newUser.Username}' added successfully.");
+            StateHasChanged();            
 
             _newUser = new();
             _newUserSelectedGroupId = null;
@@ -84,17 +77,7 @@ namespace Authora.Components.Pages
             _groupAssignments = _allGroups.ToDictionary(
                 g => g.Id,
                 g => user.UserGroups.Any(ug => ug.GroupId == g.Id)
-            );
-
-            _successMessage = $"User '{_newUser.Username}' edited successfully.";
-            StateHasChanged();
-
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(4000);
-                _successMessage = null;
-                await InvokeAsync(StateHasChanged);
-            });
+            );           
         }
 
         private async Task SaveUser()
@@ -112,15 +95,8 @@ namespace Authora.Components.Pages
             _editFormValid = false;
 
             _users = await UserService.GetAllAsync();
-            _successMessage = $"User '{_newUser.Username}' added successfully.";
-            StateHasChanged();
-
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(4000);
-                _successMessage = null;
-                await InvokeAsync(StateHasChanged);
-            });
+            ShowSuccessMessage($"User '{_editedUser.Username}' updated successfully.");
+            StateHasChanged();            
         }
 
         private void CancelEdit()
@@ -137,7 +113,20 @@ namespace Authora.Components.Pages
 
             await UserService.DeleteAsync(id);
             _users = await UserService.GetAllAsync();
-            _successMessage = "User deleted successfully.";
+            ShowSuccessMessage("User deleted successfully.");
+        }
+
+        private void ShowSuccessMessage(string message)
+        {
+            _successMessage = message;
+            StateHasChanged();
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                _successMessage = null;
+                await InvokeAsync(StateHasChanged);
+            });
         }
     }
 }
