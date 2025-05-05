@@ -1,6 +1,7 @@
 ﻿using Authora.Application.Interfaces;
 using Authora.Domain.Entities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
 namespace Authora.Components.Pages
@@ -17,6 +18,9 @@ namespace Authora.Components.Pages
         private User _editedUser = new();
         private Guid? _editingUserId = null;
         private string? _successMessage;
+
+        private EditContext? _editContext;
+        private bool _editFormValid = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -57,6 +61,16 @@ namespace Authora.Components.Pages
                 Username = user.Username,
                 Email = user.Email
             };
+
+            _editContext = new EditContext(_editedUser);
+            _editContext.OnFieldChanged += (_, __) =>
+            {
+                _editFormValid = _editContext.Validate();
+                StateHasChanged();
+            };
+
+            // Initialize validity state
+            _editFormValid = _editContext.Validate();
         }
 
         private async Task SaveUser()
@@ -70,6 +84,7 @@ namespace Authora.Components.Pages
         private void CancelEdit()
         {
             _editingUserId = null;
+            _editFormValid = false;
         }
 
         private async Task DeleteUser(Guid id)

@@ -14,7 +14,7 @@ else
             <tr>
                 <th>Username</th>
                 <th>Email</th>
-                <th></th> <!-- actions -->
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -24,7 +24,7 @@ else
                 {
                     <tr>
                         <td colspan="3">
-                            <EditForm Model="_editedUser" OnValidSubmit="SaveUser" FormName="editUserForm">
+                            <EditForm EditContext="_editContext" OnValidSubmit="SaveUser" FormName="editUserForm">
                                 <DataAnnotationsValidator />
                                 <div class="d-flex flex-column flex-md-row gap-2">
                                     <div>
@@ -35,9 +35,9 @@ else
                                         <InputText @bind-Value="_editedUser.Email" class="form-control" placeholder="Email" />
                                         <ValidationMessage For="@(() => _editedUser.Email)" />
                                     </div>
-                                    <div>
-                                        <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                        <button type="button" class="btn btn-secondary btn-sm ms-1" @onclick="CancelEdit">Cancel</button>
+                                    <div class="d-flex flex-column">
+                                        <button type="submit" class="btn btn-success btn-sm mt-1" disabled="@(!_editFormValid)">Save</button>
+                                        <button type="button" class="btn btn-secondary btn-sm mt-1" @onclick="CancelEdit">Cancel</button>
                                     </div>
                                 </div>
                             </EditForm>
