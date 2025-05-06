@@ -10,6 +10,7 @@ namespace Authora.Application.Interfaces
     public interface IGroupService
     {
         Task<List<Group>> GetAllAsync();
+        Task<Group?> GetByIdAsync(Guid id);
         Task AddAsync(Group group);
         Task DeleteAsync(Guid groupId);
     }

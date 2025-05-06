@@ -152,5 +152,56 @@ namespace Authora.Tests.Unit.Services
             var updated = await service.GetByIdAsync(user.Id);
             updated!.UserGroups.Should().ContainSingle(g => g.GroupId == group.Id);
         }
+
+        [Fact]
+        public async Task AssignGroupsAsync_ShouldNotDuplicateGroupAssignments()
+        {
+            // Arrange
+            var context = await GetInMemoryDbContextAsync();
+            var service = new UserService(context);
+            var user = context.Users.First();
+            var group = context.Groups.First();
+
+            // Act
+            await service.AssignGroupsAsync(user.Id, new List<Guid> { group.Id });
+            await service.AssignGroupsAsync(user.Id, new List<Guid> { group.Id });
+
+            // Assert
+            var updated = await service.GetByIdAsync(user.Id);
+            updated!.UserGroups.Count(ug => ug.GroupId == group.Id).Should().Be(1);
+        }
+
+        [Fact]
+        public async Task AssignGroupsAsync_WithEmptyList_ShouldRemoveAllGroupMappings()
+        {
+            var context = await GetInMemoryDbContextAsync();
+            var service = new UserService(context);
+            var user = context.Users.First();
+
+            // Act
+            await service.AssignGroupsAsync(user.Id, new List<Guid>());
+
+            // Assert
+            var updated = await service.GetByIdAsync(user.Id);
+            updated!.UserGroups.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldRemoveUserAndUserGroups()
+        {
+            var context = await GetInMemoryDbContextAsync();
+            var service = new UserService(context);
+            var user = context.Users.First();
+
+            // Act
+            await service.DeleteAsync(user.Id);
+
+            // Assert
+            var result = await context.UserGroups
+                .Where(ug => ug.UserId == user.Id)
+                .ToListAsync();
+
+            result.Should().BeEmpty();
+        }
     }
 }

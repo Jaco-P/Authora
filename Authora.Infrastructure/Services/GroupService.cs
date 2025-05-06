@@ -24,6 +24,11 @@ namespace Authora.Infrastructure.Services
             return await _context.Groups.ToListAsync();
         }
 
+        public async Task<Group?> GetByIdAsync(Guid id)
+        {
+            return await _context.Groups.FindAsync(id);
+        }
+
         public async Task AddAsync(Group group)
         {
             group.Id = Guid.NewGuid();
@@ -42,3 +47,4 @@ namespace Authora.Infrastructure.Services
         }
     }
 }
+
