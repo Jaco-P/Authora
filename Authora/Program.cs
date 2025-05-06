@@ -21,6 +21,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 //Register Group Service
 builder.Services.AddScoped<IGroupService, GroupService>();
 
+//Register Permission Service
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+
+
 
 var app = builder.Build();
 
@@ -30,6 +35,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+// Apply migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AuthoraDbContext>();
+    dbContext.Database.Migrate();
 }
 
 app.UseHttpsRedirection();

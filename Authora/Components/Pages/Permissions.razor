@@ -1,0 +1,44 @@
+﻿@page "/permissions"
+@rendermode InteractiveServer
+
+<h3>Permissions</h3>
+
+@if (_groups is null)
+{
+    <p>Loading groups...</p>
+}
+else
+{
+    <div class="mb-3">
+        <label>Select Group:</label>
+        <InputSelect @bind-Value="_selectedGroupId" class="form-control" @onchange="OnGroupChanged">
+            <option value="">-- Select --</option>
+            @foreach (var group in _groups)
+            {
+                <option value="@group.Id">@group.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    @if (_permissions is not null)
+    {
+        <h5>Permissions for Group</h5>
+        <ul>
+            @foreach (var p in _permissions)
+            {
+                <li>
+                    @p.Name
+                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeletePermission(p.Id)">Delete</button>
+                </li>
+            }
+        </ul>
+
+        <EditForm Model="_newPermission" OnValidSubmit="AddPermission">
+            <DataAnnotationsValidator />
+            <div class="d-flex gap-2">
+                <InputText @bind-Value="_newPermission.Name" placeholder="New permission name" class="form-control" />
+                <button class="btn btn-primary" type="submit">Add</button>
+            </div>
+        </EditForm>
+    }
+}

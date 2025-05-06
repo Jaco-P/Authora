@@ -6,7 +6,7 @@ namespace Authora.API.Controllers
 {
 
     [ApiController]
-    [Route("api/groupcontroller")]
+    [Route("api/[controller]")]
     public class GroupController : ControllerBase
     {
         private readonly IGroupService _groupService;

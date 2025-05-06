@@ -6,7 +6,7 @@ namespace Authora.API.Controllers
 {
 
     [ApiController]
-    [Route("api/usercontroller")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

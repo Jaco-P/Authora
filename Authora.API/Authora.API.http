@@ -1,6 +1,81 @@
-@Authora.API_HostAddress = http://localhost:5001
+﻿@host = https://localhost:7215
 
-GET {{Authora.API_HostAddress}}/weatherforecast/
+###  Get all users
+GET {{host}}/api/user
+
+### Get user by ID
+GET {{host}}/api/user/{{userId}}
+
+### Create a user
+POST {{host}}/api/user
+Content-Type: application/json
+
+{
+  "username": "jakez",
+  "email": "jake@example.com",
+  "userGroups": []
+}
+
+### Update a user
+PUT {{host}}/api/user/{{userId}}
+Content-Type: application/json
+
+{
+  "id": "{{userId}}",
+  "username": "updatedjakez",
+  "email": "updated@example.com",
+  "userGroups": []
+}
+
+### Delete a user
+DELETE {{host}}/api/user/{{userId}}
+
+### Get user count
+GET {{host}}/api/user/count
+
+### Get user count per group
+GET {{host}}/api/user/count-per-group
+
+
+### Get all groups
+GET {{host}}/api/group
+
+### Get group by ID
+GET {{host}}/api/group/{{groupId}}
+
+### Create a group
+POST {{host}}/api/group
+Content-Type: application/json
+
+{
+  "name": "Admins"
+}
+
+### Delete a group
+DELETE {{host}}/api/group/{{groupId}}
+
+### Get all permissions
+GET http://localhost:7215/api/permission
 Accept: application/json
 
 ###
+
+### Get permissions by group ID
+GET http://localhost:7215/api/permission/by-group/{{groupId}}
+Accept: application/json
+
+###
+
+### Add a new permission
+POST http://localhost:7215/api/permission
+Content-Type: application/json
+
+{
+  "name": "Level 1",
+  "groupId": "{{groupId}}"
+}
+
+###
+
+### Delete a permission by ID
+DELETE http://localhost:7215/api/permission/{{permissionId}}
