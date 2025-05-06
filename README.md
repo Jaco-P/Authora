@@ -19,7 +19,7 @@ This project follows Clean Architecture principles:
 
 ## ⚙️ Tech Stack
 
-- .NET 9 (Preview)
+- .NET 9 Core
 - Blazor Server
 - Entity Framework Core (SQLite)
 - Bootstrap 5 (UI styling)
