@@ -1,78 +1,136 @@
 # Authora
+Authora is a Blazor Server application built on .NET 9 that provides user management, group-based access control, and a permission system.
+It was developed as part of a coding assessment and emphasizes:
 
-Authora is a Blazor Server application built with .NET 9 that supports user management, group assignment, and permission modeling.  
-It was developed as part of a coding assessment with an emphasis on:
+✅ Clean Architecture
 
-- ✅ Clean architecture
-- ✅ Code-first Entity Framework Core
-- ✅ Scalable and maintainable design
-- ✅ SQLite-based persistence
-- ✅ Modular service and UI layers
+✅ Entity Framework Core (Code-First)
 
----
+✅ Modular Design & Separation of Concerns
 
-## 🏗️ Architecture
+✅ SQLite Persistence
 
-This project follows Clean Architecture principles:
+✅ Dynamic Service/UI Composition
 
----
+✅ API-First Interoperability
 
-## ⚙️ Tech Stack
+# 🏗️ Architecture
+This project follows Clean Architecture principles with clear separation between:
 
-- .NET 9 Core
-- Blazor Server
-- Entity Framework Core (SQLite)
-- Bootstrap 5 (UI styling)
+Authora.Domain – Core entities and interfaces
 
----
+Authora.Application – Service interfaces and DTOs
 
-## 📦 Features
+Authora.Infrastructure – EF Core DbContext and service implementations
 
-| Feature                        | Status |
-|-------------------------------|--------|
-| User CRUD                     | ✅ Done |
-| Group CRUD                    | ✅ Done |
-| Assign groups to users        | ✅ Done |
-| View user group assignments   | ✅ Done |
-| Edit group assignments        | ✅ Done |
-| Code-first EF Core setup      | ✅ Done |
-| SQLite persistence            | ✅ Done |
-| Success messages with timeout | ✅ Done |
-| Clean service layering        | ✅ Done |
-| Fully interactive UI          | ✅ Done |
+Authora.API – RESTful API endpoints
 
----
+Authora – Blazor Server UI (RCL)
 
-## 🧪 Bonus
+Authora.Tests.Unit and Authora.Tests.Integration – Full test coverage support
 
-- Group assignment is interactive (checkboxes/dropdowns)
-- Success alerts auto-dismiss after 4 seconds
-- Designed for extensibility (permissions per group, RBAC ready)
-- No third-party dependencies required
+# ⚙️ Tech Stack
+.NET 9
 
----
+Blazor Server
 
-## 🚀 Getting Started
+Entity Framework Core (SQLite)
 
-### Prerequisites
+Bootstrap 5 (for styling)
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
-- Visual Studio 2022 (Preview) or VS Code
+xUnit & Moq for testing
 
-### Steps
+#📦 Features
+Feature	Status
+User CRUD	✅ Done
+Group CRUD	✅ Done
+Permission CRUD	✅ Done
+Assign groups to users	✅ Done
+Assign permissions to groups	✅ Done
+View user group + permission tree	✅ Done
+Dashboard with all user relations	✅ Done
+Code-first EF Core migrations	✅ Done
+SQLite database	✅ Done
+Auto-migration at startup	✅ Done
+API endpoints for all operations	✅ Done
+Structured error handling	✅ Done
+Interactive Blazor UI	✅ Done
+Success alerts with timeout	✅ Done
 
-```bash
+# 📡 API Endpoints
+All endpoints are exposed under:
+
+bash
+Copy
+Edit
+https://localhost:7215/api/
+Users
+GET /user – Get all users
+
+GET /user/{id} – Get a single user
+
+POST /user – Create a user
+
+PUT /user/{id} – Update a user
+
+DELETE /user/{id} – Delete a user
+
+Groups
+GET /group
+
+GET /group/{id}
+
+POST /group
+
+DELETE /group/{id}
+
+Permissions
+GET /permission
+
+GET /permission/by-group/{groupId}
+
+POST /permission
+
+DELETE /permission/{id}
+
+# 🧪 Testing
+Authora.Tests.Unit includes tests for service logic, e.g., UserService
+
+Authora.Tests.Integration (planned) for DB + API integration scenarios
+
+✅ Assessment Goals Met
+ Implement clean architecture
+
+ Model user/group/permission relationships
+
+ Persist all data via SQLite
+
+ Build interactive and maintainable Blazor UI
+
+ Expose full REST API
+
+ Build unit test coverage for services
+
+# 🚀 Getting Started
+Prerequisites
+.NET 9 SDK
+
+Visual Studio 2022 (Preview) or VS Code
+
+Commands
+bash
+Copy
+Edit
 git clone https://github.com/your-username/Authora.git
 cd Authora
 dotnet build
 dotnet ef database update --project Authora.Infrastructure --startup-project Authora
 dotnet run --project Authora
 
-## 📄 License
+# 📄 License
+All rights reserved.
+This code was developed solely for assessment purposes.
+Do not reuse or distribute without explicit permission.
 
-All rights reserved. This code is proprietary and was submitted solely for assessment purposes.  
-No part of this codebase may be reused, copied, or redistributed without explicit permission.
-
-![image](https://github.com/user-attachments/assets/d06567a6-cec0-4c2d-8073-f45fb9b727c9)
-
+Would you like me to commit this updated README.md for you or prepare a .http test suite for all your endpoints next?
 
