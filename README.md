@@ -99,6 +99,7 @@ Authora.Tests.Unit includes tests for service logic, e.g., UserService
 Authora.Tests.Integration (planned) for DB + API integration scenarios
 
 ✅ Assessment Goals Met
+
  Implement clean architecture
 
  Model user/group/permission relationships
