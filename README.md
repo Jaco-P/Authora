@@ -132,5 +132,3 @@ All rights reserved.
 This code was developed solely for assessment purposes.
 Do not reuse or distribute without explicit permission.
 
-Would you like me to commit this updated README.md for you or prepare a .http test suite for all your endpoints next?
-
