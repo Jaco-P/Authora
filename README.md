@@ -116,7 +116,7 @@ Authora.Tests.Integration (planned) for DB + API integration scenarios
 Prerequisites
 .NET 9 SDK
 
-Visual Studio 2022 (Preview) or VS Code
+Visual Studio 2022 or VS Code
 
 Commands
 bash
