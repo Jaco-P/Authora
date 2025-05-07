@@ -110,7 +110,9 @@ Authora.Tests.Integration (planned) for DB + API integration scenarios
 
  Expose full REST API
 
- Build unit test coverage for services
+ Build unit test coverage for services (Group and User)
+ 
+ Planned test coverage for Permission services
 
 # 🚀 Getting Started
 Prerequisites
