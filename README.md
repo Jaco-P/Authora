@@ -1,4 +1,4 @@
-#Authora
+# Authora
 Authora is a Blazor Server application built on .NET 9 that provides user management, group-based access control, and a permission system.
 It was developed as part of a coding assessment and emphasizes:
 
@@ -14,7 +14,7 @@ It was developed as part of a coding assessment and emphasizes:
 
 ✅ API-First Interoperability
 
-#🏗️ Architecture
+# 🏗️ Architecture
 This project follows Clean Architecture principles with clear separation between:
 
 Authora.Domain – Core entities and interfaces
@@ -29,7 +29,7 @@ Authora – Blazor Server UI (RCL)
 
 Authora.Tests.Unit and Authora.Tests.Integration – Full test coverage support
 
-#⚙️ Tech Stack
+# ⚙️ Tech Stack
 .NET 9
 
 Blazor Server
@@ -57,7 +57,7 @@ Structured error handling	✅ Done
 Interactive Blazor UI	✅ Done
 Success alerts with timeout	✅ Done
 
-#📡 API Endpoints
+# 📡 API Endpoints
 All endpoints are exposed under:
 
 bash
@@ -93,7 +93,7 @@ POST /permission
 
 DELETE /permission/{id}
 
-#🧪 Testing
+# 🧪 Testing
 Authora.Tests.Unit includes tests for service logic, e.g., UserService
 
 Authora.Tests.Integration (planned) for DB + API integration scenarios
@@ -111,7 +111,7 @@ Authora.Tests.Integration (planned) for DB + API integration scenarios
 
  Build unit test coverage for services
 
-#🚀 Getting Started
+# 🚀 Getting Started
 Prerequisites
 .NET 9 SDK
 
@@ -127,7 +127,7 @@ dotnet build
 dotnet ef database update --project Authora.Infrastructure --startup-project Authora
 dotnet run --project Authora
 
-#📄 License
+# 📄 License
 All rights reserved.
 This code was developed solely for assessment purposes.
 Do not reuse or distribute without explicit permission.
