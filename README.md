@@ -99,6 +99,7 @@ Authora.Tests.Unit includes tests for service logic, e.g., UserService
 Authora.Tests.Integration (planned) for DB + API integration scenarios
 
 ✅ Assessment Goals Met
+
  Implement clean architecture
 
  Model user/group/permission relationships
@@ -109,13 +110,15 @@ Authora.Tests.Integration (planned) for DB + API integration scenarios
 
  Expose full REST API
 
- Build unit test coverage for services
+ Build unit test coverage for services (Group and User)
+ 
+ Planned test coverage for Permission services
 
 # 🚀 Getting Started
 Prerequisites
 .NET 9 SDK
 
-Visual Studio 2022 (Preview) or VS Code
+Visual Studio 2022 or VS Code
 
 Commands
 bash
@@ -131,6 +134,4 @@ dotnet run --project Authora
 All rights reserved.
 This code was developed solely for assessment purposes.
 Do not reuse or distribute without explicit permission.
-
-Would you like me to commit this updated README.md for you or prepare a .http test suite for all your endpoints next?
 
