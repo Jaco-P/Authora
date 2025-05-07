@@ -1,17 +1,125 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Authora.Domain.Entities
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Groups</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-     
-    </tbody>
-</table>
+<h3>User Overview</h3>
+
+@if (_users == null || _groups == null || _permissions == null)
+{
+    <p>Loading data...</p>
+}
+else
+{
+    <h5>User Group Permissions</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Groups</th>
+                <th>Permissions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in _users)
+            {
+                var userGroups = user.UserGroups.Select(ug => ug.Group).ToList();
+                var userPermissions = userGroups
+                .SelectMany(g => _permissions.Where(p => p.GroupId == g.Id))
+                .DistinctBy(p => p.Id)
+                .ToList();
+
+                <tr>
+                    <td>@user.Username</td>
+                    <td>
+                        @if (userGroups.Any())
+                        {
+                            <ul>
+                                @foreach (var g in userGroups)
+                                {
+                                    <li>@g.Name</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <em>No groups</em>
+                        }
+                    </td>
+                    <td>
+                        @if (userPermissions.Any())
+                        {
+                            <ul>
+                                @foreach (var p in userPermissions)
+                                {
+                                    <li>@p.Name</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <em>No permissions</em>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Users</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in _users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Groups</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in _groups)
+            {
+                <tr>
+                    <td>@group.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Permissions</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Group</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var perm in _permissions)
+            {
+                var groupName = _groups.FirstOrDefault(g => g.Id == perm.GroupId)?.Name;
+                <tr>
+                    <td>@perm.Name</td>
+                    <td>@perm.Description</td>
+                    <td>@groupName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

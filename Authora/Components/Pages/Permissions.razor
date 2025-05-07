@@ -1,44 +1,74 @@
 ﻿@page "/permissions"
 @rendermode InteractiveServer
 
+
 <h3>Permissions</h3>
 
-@if (_groups is null)
+@if (_groups == null)
 {
     <p>Loading groups...</p>
 }
 else
 {
     <div class="mb-3">
-        <label>Select Group:</label>
-        <InputSelect @bind-Value="_selectedGroupId" class="form-control" @onchange="OnGroupChanged">
-            <option value="">-- Select --</option>
+        <label for="groupSelect" class="form-label">Select Group</label>
+        <InputSelect @bind-Value="SelectedGroupId" class="form-select">
+            <option value="">-- Select Group --</option>
             @foreach (var group in _groups)
             {
                 <option value="@group.Id">@group.Name</option>
             }
         </InputSelect>
+
     </div>
 
-    @if (_permissions is not null)
+    @if (_selectedGroupId.HasValue)
     {
-        <h5>Permissions for Group</h5>
-        <ul>
-            @foreach (var p in _permissions)
-            {
-                <li>
-                    @p.Name
-                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeletePermission(p.Id)">Delete</button>
-                </li>
-            }
-        </ul>
+        <h5>Assigned Permissions</h5>
 
-        <EditForm Model="_newPermission" OnValidSubmit="AddPermission">
+        @if (_permissions is null)
+        {
+            <p>Loading permissions...</p>
+        }
+        else if (!_permissions.Any())
+        {
+            <p>No permissions assigned to this group.</p>
+        }
+        else
+        {
+            <ul class="list-group mb-3">
+                @foreach (var permission in _permissions)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>@permission.Name</strong><br />
+                            <small>@permission.Description</small>
+                        </span>
+                        <button class="btn btn-danger btn-sm" @onclick="@(() => DeletePermission(permission.Id))">Remove</button>
+                    </li>
+                }
+            </ul>
+        }
+
+        <h5>Add New Permission</h5>
+
+        <EditForm Model="_newPermission" OnValidSubmit="AddPermission"FormName="addPermissionForm">
             <DataAnnotationsValidator />
-            <div class="d-flex gap-2">
-                <InputText @bind-Value="_newPermission.Name" placeholder="New permission name" class="form-control" />
-                <button class="btn btn-primary" type="submit">Add</button>
+            <ValidationSummary />
+
+            <div class="mb-2">
+                <label class="form-label">Permission Name</label>
+                <InputText @bind-Value="_newPermission.Name" class="form-control" />
+                <ValidationMessage For="@(() => _newPermission.Name)" />
             </div>
+
+            <div class="mb-2">
+                <label class="form-label">Description</label>
+                <InputText @bind-Value="_newPermission.Description" class="form-control" />
+                <ValidationMessage For="@(() => _newPermission.Description)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Permission</button>
         </EditForm>
     }
 }

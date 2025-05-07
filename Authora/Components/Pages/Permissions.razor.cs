@@ -20,20 +20,28 @@ namespace Authora.Components.Pages
         private List<Group>? _groups;
         private List<Permission>? _permissions;
         private Guid? _selectedGroupId;
+
         private Permission _newPermission = new();
 
         protected override async Task OnInitializedAsync()
         {
             _groups = await GroupService.GetAllAsync();
+
+            if (_groups.Any())
+            {
+                SelectedGroupId = _groups.First().Id;
+            }
         }
 
-        private async Task OnGroupChanged(ChangeEventArgs e)
+        private async Task OnGroupChanged()
         {
-            if (Guid.TryParse(e.Value?.ToString(), out var groupId))
+            if (_selectedGroupId.HasValue)
             {
-                _selectedGroupId = groupId;
-                _permissions = await PermissionService.GetByGroupIdAsync(groupId);
-                _newPermission = new Permission { GroupId = groupId };
+                _permissions = await PermissionService.GetByGroupIdAsync(_selectedGroupId.Value);
+                _newPermission = new Permission
+                {
+                    GroupId = _selectedGroupId.Value
+                };
             }
             else
             {
@@ -47,19 +55,28 @@ namespace Authora.Components.Pages
             {
                 _newPermission.GroupId = _selectedGroupId.Value;
                 await PermissionService.AddAsync(_newPermission);
-                _permissions = await PermissionService.GetByGroupIdAsync(_selectedGroupId.Value);
-                _newPermission = new Permission { GroupId = _selectedGroupId.Value };
+                await OnGroupChanged();
             }
         }
 
-        private async Task DeletePermission(Guid id)
+        private async Task DeletePermission(Guid permissionId)
         {
-            await PermissionService.DeleteAsync(id);
-            if (_selectedGroupId.HasValue)
-            {
-                _permissions = await PermissionService.GetByGroupIdAsync(_selectedGroupId.Value);
-            }
+            await PermissionService.DeleteAsync(permissionId);
+            await OnGroupChanged();
         }
 
+        // Keep this to handle binding side effect from InputSelect
+        private Guid? SelectedGroupId
+        {
+            get => _selectedGroupId;
+            set
+            {
+                if (_selectedGroupId != value)
+                {
+                    _selectedGroupId = value;
+                    _ = OnGroupChanged();
+                }
+            }
+        }
     }
 }

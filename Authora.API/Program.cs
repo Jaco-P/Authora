@@ -26,6 +26,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 
+//register Permission Service
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
 //Register DbContext
 
 builder.Services.AddDbContext<AuthoraDbContext>(options =>

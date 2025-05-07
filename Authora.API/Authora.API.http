@@ -55,19 +55,19 @@ Content-Type: application/json
 DELETE {{host}}/api/group/{{groupId}}
 
 ### Get all permissions
-GET http://localhost:7215/api/permission
+GET https://localhost:7215/api/permission
 Accept: application/json
 
 ###
 
 ### Get permissions by group ID
-GET http://localhost:7215/api/permission/by-group/{{groupId}}
+GET https://localhost:7215/api/permission/by-group/{{groupId}}
 Accept: application/json
 
 ###
 
 ### Add a new permission
-POST http://localhost:7215/api/permission
+POST https://localhost:7215/api/permission
 Content-Type: application/json
 
 {
@@ -78,4 +78,4 @@ Content-Type: application/json
 ###
 
 ### Delete a permission by ID
-DELETE http://localhost:7215/api/permission/{{permissionId}}
+DELETE https://localhost:7215/api/permission/{{permissionId}}

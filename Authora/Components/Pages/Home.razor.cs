@@ -11,9 +11,19 @@ namespace Authora.Components.Pages
 
         [Inject] IGroupService GroupService { get; set; } = default!;
 
+        [Inject] IPermissionService PermissionService { get; set; } = default!;
+
         [Inject] IJSRuntime JSRuntime { get; set; } = default!;
 
-        private List<User> _users = new List<User>();
-        private List<Group> _allGroups = new List<Group>();
+        private List<User> _users = new();
+        private List<Group> _groups = new();
+        private List<Permission> _permissions = new();
+
+        protected override async Task OnInitializedAsync()
+        {
+            _users = await UserService.GetAllAsync();
+            _groups = await GroupService.GetAllAsync();
+            _permissions = await PermissionService.GetAllAsync();
+        }
     }
 }

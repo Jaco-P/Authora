@@ -18,15 +18,29 @@ namespace Authora.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Permission>>> GetAll()
         {
-            var permissions = await _permissionService.GetAllAsync();
-            return Ok(permissions);
+            try
+            {
+                var permissions = await _permissionService.GetAllAsync();
+                return Ok(permissions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving permissions: {ex.Message}");
+            }
         }
 
         [HttpGet("by-group/{groupId}")]
         public async Task<ActionResult<IEnumerable<Permission>>> GetByGroup(Guid groupId)
         {
-            var permissions = await _permissionService.GetByGroupIdAsync(groupId);
-            return Ok(permissions);
+            try
+            {
+                var permissions = await _permissionService.GetByGroupIdAsync(groupId);
+                return Ok(permissions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving permissions for group {groupId}: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -35,15 +49,29 @@ namespace Authora.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _permissionService.AddAsync(permission);
-            return CreatedAtAction(nameof(GetByGroup), new { groupId = permission.GroupId }, permission);
+            try
+            {
+                await _permissionService.AddAsync(permission);
+                return CreatedAtAction(nameof(GetByGroup), new { groupId = permission.GroupId }, permission);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while creating the permission: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _permissionService.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                await _permissionService.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the permission: {ex.Message}");
+            }
         }
     }
 }
