@@ -47,56 +47,102 @@ namespace Authora.Components.Pages
                 });
             }
 
-            await UserService.AddAsync(_newUser);
-            _users = await UserService.GetAllAsync();
-            ShowSuccessMessage($"User '{_newUser.Username}' added successfully.");
-            StateHasChanged();            
+            try
+            {
+                await UserService.AddAsync(_newUser);
+                _users = await UserService.GetAllAsync();
+                ShowSuccessMessage($"User '{_newUser.Username}' added successfully.");
+            }
+            catch (Exception ex) 
+            {
+                while (ex.InnerException != null) 
+                {
+                    ex = ex.InnerException;
+                }
 
-            _newUser = new();
-            _newUserSelectedGroupId = null;
+                Console.WriteLine($"Could not add User '{_newUser.Username}'. The error was {ex.Message}");
+            }
+            finally
+            {
+                StateHasChanged();
+
+                //Reset _newUser and Group id so that a new user can be added
+                _newUser = new();
+                _newUserSelectedGroupId = null;
+            }
+            
+            
         }
 
         private void EditUser(User user)
         {
-            _editingUserId = user.Id;
-            _editedUser = new User
+            try
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email
-            };
+                _editingUserId = user.Id;
+                _editedUser = new User
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email
+                };
 
-            _editContext = new EditContext(_editedUser);
-            _editContext.OnFieldChanged += (_, __) =>
-            {
+                _editContext = new EditContext(_editedUser);
+                _editContext.OnFieldChanged += (_, __) =>
+                {
+                    _editFormValid = _editContext.Validate();
+                    StateHasChanged();
+                };
                 _editFormValid = _editContext.Validate();
-                StateHasChanged();
-            };
-            _editFormValid = _editContext.Validate();
 
-            _groupAssignments = _allGroups.ToDictionary(
-                g => g.Id,
-                g => user.UserGroups.Any(ug => ug.GroupId == g.Id)
-            );           
+                _groupAssignments = _allGroups.ToDictionary(
+                    g => g.Id,
+                    g => user.UserGroups.Any(ug => ug.GroupId == g.Id)
+                );
+            }
+            catch (Exception ex) 
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                Console.WriteLine($"There was an error updating user '{_editedUser.Username}'. The error was {ex.Message}");
+            }
+             
         }
 
         private async Task SaveUser()
         {
-            await UserService.UpdateAsync(_editedUser);
+            try
+            {
+                await UserService.UpdateAsync(_editedUser);
 
-            var selectedGroupIds = _groupAssignments
-                .Where(g => g.Value)
-                .Select(g => g.Key)
-                .ToList();
+                var selectedGroupIds = _groupAssignments
+                    .Where(g => g.Value)
+                    .Select(g => g.Key)
+                    .ToList();
 
-            await UserService.AssignGroupsAsync(_editedUser.Id, selectedGroupIds);
+                await UserService.AssignGroupsAsync(_editedUser.Id, selectedGroupIds);
 
-            _editingUserId = null;
-            _editFormValid = false;
+                _editingUserId = null;
+                _editFormValid = false;
 
-            _users = await UserService.GetAllAsync();
-            ShowSuccessMessage($"User '{_editedUser.Username}' updated successfully.");
-            StateHasChanged();            
+                _users = await UserService.GetAllAsync();
+                ShowSuccessMessage($"User '{_editedUser.Username}' updated successfully.");
+            }
+            catch (Exception ex) 
+            {
+                while (ex.InnerException != null) 
+                {
+                    ex = ex.InnerException;
+                }
+                ShowSuccessMessage($"User '{_editedUser.Username}' updating failed. The error was {ex.Message}");
+                Console.Write($"User '{_editedUser.Username}' updating failed. The error was {ex.Message}");
+            }
+            finally
+            {
+                StateHasChanged();
+            }   
+                     
         }
 
         private void CancelEdit()
@@ -110,10 +156,23 @@ namespace Authora.Components.Pages
             bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this user?");
             if (!confirmed)
                 return;
+            try
+            {
+                await UserService.DeleteAsync(id);
+                _users = await UserService.GetAllAsync();
+                ShowSuccessMessage("User deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
 
-            await UserService.DeleteAsync(id);
-            _users = await UserService.GetAllAsync();
-            ShowSuccessMessage("User deleted successfully.");
+                ShowSuccessMessage($"Failed to delete user with Id '{id}'. The error was {ex.Message}");
+                Console.WriteLine($"");
+            }
+            
         }
 
         private void ShowSuccessMessage(string message)

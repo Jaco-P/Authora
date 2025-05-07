@@ -27,10 +27,25 @@ namespace Authora.Components.Pages
 
         private async Task AddGroup()
         {
-            await GroupService.AddAsync(_newGroup);
-            _newGroup = new();
-            _groups = await GroupService.GetAllAsync();
-            _successMessage = "Group added successfully.";
+            try
+            {
+                await GroupService.AddAsync(_newGroup);
+                _newGroup = new();
+                _groups = await GroupService.GetAllAsync();
+                _successMessage = "Group added successfully.";
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+
+                _successMessage = "Failed to add Group.";
+                Console.Write($"Could not add group. The error was: {ex.Message}");
+            }
+
+
         }
 
         private async Task DeleteGroup(Guid groupId)
@@ -39,9 +54,22 @@ namespace Authora.Components.Pages
             if (!confirmed)
                 return;
 
-            await GroupService.DeleteAsync(groupId);
-            _groups = await GroupService.GetAllAsync();
-            _successMessage = "Group deleted successfully.";
+            try
+            {
+                await GroupService.DeleteAsync(groupId);
+                _groups = await GroupService.GetAllAsync();
+                _successMessage = "Group deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+
+                Console.WriteLine($"Group could not be deleted. The error was : {ex.Message}");
+                _successMessage = "Failed to delete Group.";
+            }
         }
     }
 }

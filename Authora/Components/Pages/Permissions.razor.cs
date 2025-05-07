@@ -37,11 +37,24 @@ namespace Authora.Components.Pages
         {
             if (_selectedGroupId.HasValue)
             {
-                _permissions = await PermissionService.GetByGroupIdAsync(_selectedGroupId.Value);
-                _newPermission = new Permission
+                try
                 {
-                    GroupId = _selectedGroupId.Value
-                };
+                    _permissions = await PermissionService.GetByGroupIdAsync(_selectedGroupId.Value);
+                    _newPermission = new Permission
+                    {
+                        GroupId = _selectedGroupId.Value
+                    };
+                }
+                catch (Exception ex)
+                {
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
+
+                    Console.WriteLine($"Could not retrieve Group. The error was: {ex.Message}");
+                }
+                
             }
             else
             {
@@ -53,16 +66,40 @@ namespace Authora.Components.Pages
         {
             if (_selectedGroupId.HasValue)
             {
-                _newPermission.GroupId = _selectedGroupId.Value;
-                await PermissionService.AddAsync(_newPermission);
-                await OnGroupChanged();
+                try
+                {
+                    _newPermission.GroupId = _selectedGroupId.Value;
+                    await PermissionService.AddAsync(_newPermission);
+                    await OnGroupChanged();
+                }
+                catch (Exception ex)
+                {
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
+
+                    Console.WriteLine($"Could not Add Permission. The error was: {ex.Message}");
+                }
             }
         }
 
         private async Task DeletePermission(Guid permissionId)
         {
-            await PermissionService.DeleteAsync(permissionId);
-            await OnGroupChanged();
+            try
+            {
+                await PermissionService.DeleteAsync(permissionId);
+                await OnGroupChanged();
+            }
+            catch (Exception ex)
+            {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                Console.WriteLine($"Could not delete permission. The error was {ex.Message}");
+            }
+            
         }
 
         // Keep this to handle binding side effect from InputSelect
